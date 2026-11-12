@@ -147,6 +147,8 @@ jobs:
           # uvx gives Drafter its own disposable environment. If the student's
           # project has requirements.txt, layer those packages into the same
           # environment so imports needed while compiling can succeed.
+          export PYTHONPATH="$GITHUB_WORKSPACE${PYTHONPATH:+:$PYTHONPATH}"
+          
           DRAFTER_RUN=(uvx --from "$DRAFTER_SPEC")
           if [[ -f requirements.txt ]]; then
             # The workflow controls the Drafter major version. Ignore any
@@ -295,6 +297,7 @@ jobs:
         if: ${{ !cancelled() }}
         shell: bash
         run: |
+          mkdir -p _site/dashboard
           git log --oneline --decorate --graph --all -n 50 > _site/dashboard/commits.txt
 
       - name: Create deployment dashboard
